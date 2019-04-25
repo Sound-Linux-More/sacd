@@ -1,5 +1,5 @@
 /*
-    Copyright 2015-2016 Robert Tari <robert.tari@gmail.com>
+    Copyright 2015-2019 Robert Tari <robert@tari.in>
     Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
@@ -111,6 +111,7 @@ public:
     bool close();
     string set_track(uint32_t track_number, area_id_e area_id = AREA_BOTH, uint32_t offset = 0);
     bool read_frame(uint8_t* frame_data, size_t* frame_size, frame_type_e* frame_type);
+    void getTrackDetails(uint32_t track_number, area_id_e area_id, TrackDetails* cTrackDetails);
 private:
     uint64_t get_dsti_for_frame(uint32_t frame_nr);
 };

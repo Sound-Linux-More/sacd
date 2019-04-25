@@ -1,0 +1,2 @@
+version=3
+http://launchpad.net/sacd/+download .*/sacd-([0-9.]+)\.tar\.gz

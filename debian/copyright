@@ -1,16 +1,16 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: sacd
-Upstream-Contact: Robert Tari <robert.tari@gmail.com>
+Upstream-Contact: Robert Tari <robert@tari.in>
 Source: https://code.launchpad.net/~robert-tari/sacd/trunk
 
 Files: *
-Copyright: 2015-2018 Robert Tari <robert.tari@gmail.com>
+Copyright: 2015-2019 Robert Tari <robert@tari.in>
            2012 Vladislav Goncharov <vl-g@yandex.ru>
            2011-2018 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2018 Robert Tari <robert.tari@gmail.com>
+Copyright: 2019 Robert Tari <robert@tari.in>
 License: GPL-3.0+
 
 License: GPL-3.0+

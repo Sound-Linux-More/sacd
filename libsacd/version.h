@@ -1,5 +1,5 @@
 /*
-    Copyright 2015-2018 Robert Tari <robert.tari@gmail.com>
+    Copyright 2015-2019 Robert Tari <robert@tari.in>
 
     This file is part of SACD.
 
@@ -17,5 +17,5 @@
     along with SACD.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 */
 
-#define APPVERSION "18.6.25"
+#define APPVERSION "19.3.21"
 

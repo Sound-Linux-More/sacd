@@ -1,5 +1,5 @@
 /*
-    Copyright 2015-2016 Robert Tari <robert.tari@gmail.com>
+    Copyright 2015-2019 Robert Tari <robert@tari.in>
     Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
@@ -333,6 +333,17 @@ bool sacd_disc_t::close()
     }
 
     return true;
+}
+
+void sacd_disc_t::getTrackDetails(uint32_t track_number, area_id_e area_id, TrackDetails* cTrackDetails)
+{
+    scarletbook_area_t* cArea = get_area(area_id);
+    area_track_text_t cAreaTrackText = cArea->area_track_text[track_number];
+
+    cTrackDetails->strArtist = cAreaTrackText.track_type_performer.size() ? cAreaTrackText.track_type_performer : "Unknown Artist";
+    cTrackDetails->strTitle = cAreaTrackText.track_type_title;
+    cTrackDetails->nChannels = cArea->area_toc->channel_count;
+    cTrackDetails->nSampleRate = SACD_SAMPLING_FREQUENCY;
 }
 
 string sacd_disc_t::set_track(uint32_t track_number, area_id_e area_id, uint32_t offset)

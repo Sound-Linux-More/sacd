@@ -80,5 +80,7 @@ clean:
 install: sacd
 
 	install -d $(DESTDIR)/usr/bin
-	install ./sacd $(DESTDIR)/usr/bin
+	install -m 0755 ./sacd $(DESTDIR)/usr/bin
+	install -d $(DESTDIR)/usr/share/man/man1
+	install -m 0644 ./sacd.1 $(DESTDIR)/usr/share/man/man1
 

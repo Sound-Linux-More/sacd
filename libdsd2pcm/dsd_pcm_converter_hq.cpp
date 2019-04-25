@@ -1,5 +1,5 @@
 /*
-    Copyright 2015-2016 Robert Tari <robert.tari@gmail.com>
+    Copyright 2015-2016 Robert Tari <robert@tari.in>
     Copyright 2012 Vladislav Goncharov <vl-g@yandex.ru> (HQ DSD->PCM converter 88.2/96 kHz)
 
     This file is part of SACD.

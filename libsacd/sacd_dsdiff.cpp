@@ -1,5 +1,5 @@
 /*
-    Copyright 2015-2018 Robert Tari <robert.tari@gmail.com>
+    Copyright 2015-2019 Robert Tari <robert@tari.in>
     Copyright 2011-2018 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
@@ -393,6 +393,14 @@ bool sacd_dsdiff_t::close()
     m_dsti_size = 0;
 
     return true;
+}
+
+void sacd_dsdiff_t::getTrackDetails(uint32_t track_number, area_id_e area_id, TrackDetails* cTrackDetails)
+{
+    cTrackDetails->strArtist = "Unknown Artist";
+    cTrackDetails->strTitle = "Unknown Title";
+    cTrackDetails->nChannels = m_channel_count;
+    cTrackDetails->nSampleRate = m_samplerate;
 }
 
 string sacd_dsdiff_t::set_track(uint32_t track_number, area_id_e area_id, uint32_t offset)

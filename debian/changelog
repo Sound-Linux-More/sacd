@@ -1,3 +1,16 @@
+sacd (19.3.21.35~ubuntu19.04.1) disco; urgency=low
+
+  * Auto build.
+
+ -- Robert Tari <robert@tari.in>  Thu, 21 Mar 2019 20:43:45 +0000
+
+sacd (19.3.21) xenial; urgency=medium
+
+  * Added option to display source info (LP: #1820971)
+  * Set 88.2KHz as default
+
+ -- Robert Tari <robert@tari.in>  Thu, 21 Mar 2019 21:23:48 +0100
+
 sacd (18.6.25) xenial; urgency=medium
 
   * Added option to extract stereo area only

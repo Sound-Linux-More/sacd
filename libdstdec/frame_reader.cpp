@@ -26,7 +26,7 @@
     <maxim.anisiutkin@gmail.com>
 
     * Robert Tari
-    <robert.tari@gmail.com>
+    <robert@tari.in>
 
     in the course of development of the MPEG-4 Audio standard ISO-14496-1, 2 and 3.
     This software module is an implementation of a part of one or more MPEG-4 Audio

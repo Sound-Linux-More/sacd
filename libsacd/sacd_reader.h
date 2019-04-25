@@ -1,5 +1,5 @@
 /*
-    Copyright 2015-2016 Robert Tari <robert.tari@gmail.com>
+    Copyright 2015-2019 Robert Tari <robert@tari.in>
     Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
@@ -31,6 +31,14 @@ enum area_id_e {AREA_BOTH = 0, AREA_TWOCH = 1, AREA_MULCH = 2};
 enum frame_type_e {FRAME_DSD = 0, FRAME_DST = 1, FRAME_INVALID = -1};
 enum media_type_t {UNK_TYPE = 0, ISO_TYPE = 1, DSDIFF_TYPE = 2, DSF_TYPE = 3};
 
+struct TrackDetails
+{
+    string strArtist;
+    string strTitle;
+    int nChannels;
+    int nSampleRate;
+};
+
 class sacd_reader_t {
 public:
     sacd_reader_t() {}
@@ -45,6 +53,7 @@ public:
     virtual bool is_dst() = 0;
     virtual string set_track(uint32_t track_number, area_id_e area_id = AREA_BOTH, uint32_t offset = 0) = 0;
     virtual bool read_frame(uint8_t* frame_data, size_t* frame_size, frame_type_e* frame_type) = 0;
+    virtual void getTrackDetails(uint32_t track_number, area_id_e area_id, TrackDetails* cTrackDetails) = 0;
 };
 
 #endif

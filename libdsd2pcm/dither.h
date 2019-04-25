@@ -1,6 +1,6 @@
 /*
     HQ DSD->PCM converter 88.2/96 kHz
-    Copyright (c) 2015-2016 Robert Tari <robert.tari@gmail.com>
+    Copyright (c) 2015-2016 Robert Tari <robert@tari.in>
     Copyright (c) 2012 Vladislav Goncharov <vl-g@yandex.ru>
 
     This file is part of SACD.
