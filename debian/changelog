@@ -1,0 +1,144 @@
+sacd (18.6.25) xenial; urgency=medium
+
+  * Added option to extract stereo area only
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 25 Jun 2018 01:45:42 +0200
+
+sacd (18.5.4) xenial; urgency=medium
+
+  * Fixed DSDIFF track length
+
+ -- Robert Tari <robert.tari@gmail.com>  Fri, 04 May 2018 02:44:24 +0200
+
+sacd (16.10.03) xenial; urgency=medium
+
+  * Keep edited master chunks by default
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 03 Oct 2016 23:14:52 +0200
+
+sacd (16.09.21) xenial; urgency=medium
+
+  * Multithreaded pcm converter
+  * Highest quality 88200*x decoder
+  * Improved de-clicking
+  * Reworked float->24bit logic
+  * Some rework in dsf reader
+  * Various minor code changes
+
+ -- Robert Tari <robert.tari@gmail.com>  Wed, 21 Sep 2016 02:33:30 +0200
+
+sacd (16.06.23) xenial; urgency=medium
+
+  * de-Gibbs removed
+
+ -- Robert Tari <robert.tari@gmail.com>  Thu, 23 Jun 2016 00:50:52 +0200
+
+sacd (16.06.07) xenial; urgency=medium
+
+  * Signal when each decoding thread finishes
+
+ -- Robert Tari <robert.tari@gmail.com>  Tue, 07 Jun 2016 17:39:12 +0200
+
+sacd (16.03.29) trusty; urgency=medium
+
+  * Updated progress calculations
+
+ -- Robert Tari <robert.tari@gmail.com>  Tue, 29 Mar 2016 15:59:31 +0200
+
+sacd (16.03.18) trusty; urgency=medium
+
+  * Updated filenames to display channel count
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 28 Mar 2016 22:31:06 +0200
+
+sacd (16.03.18) trusty; urgency=medium
+
+  * Updated progress calculations
+
+ -- Robert Tari <robert.tari@gmail.com>  Fri, 18 Mar 2016 14:49:57 +0100
+
+sacd (16.03.15) trusty; urgency=medium
+
+  * Updated progress calculations
+
+ -- Robert Tari <robert.tari@gmail.com>  Tue, 15 Mar 2016 13:25:34 +0100
+
+sacd (16.03.14) trusty; urgency=medium
+
+  * DSF header bug fix
+  * Set lower thread limit
+  * Updated progress calculations
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 14 Mar 2016 21:30:35 +0100
+
+sacd (16.03.12) trusty; urgency=medium
+
+  * Added support for discs with mismatching track count in
+    stereo/multichannel areas
+
+ -- Robert Tari <robert.tari@gmail.com>  Sat, 12 Mar 2016 17:35:25 +0100
+
+sacd (16.01.25) trusty; urgency=medium
+
+  * Replace unsafe characters in output filename
+  * Format output filename depending on artist tag presence
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 25 Jan 2016 20:29:19 +0100
+
+sacd (15.11.21) trusty; urgency=medium
+
+  * Filter out invalid trailing DSD samples
+
+ -- Robert Tari <robert.tari@gmail.com>  Sun, 22 Nov 2015 00:11:24 +0100
+
+sacd (15.08.14) trusty; urgency=medium
+
+  * Fixed progress hang when CPU count is greater than track count
+
+ -- Robert Tari <robert.tari@gmail.com>  Fri, 14 Aug 2015 12:12:53 +0200
+
+sacd (15.08.04) trusty; urgency=medium
+
+  * Multi-threaded DST decoder
+  * Lots of code rewrites
+
+ -- Robert Tari <robert.tari@gmail.com>  Tue, 04 Aug 2015 02:09:22 +0200
+
+sacd (15.06.29) trusty; urgency=medium
+
+  * Added support for DSD256 and DSD512
+  * Removed single-precision filters
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 29 Jun 2015 02:42:46 +0200
+
+sacd (15.06.26) trusty; urgency=medium
+
+  * Added multiple sample rates
+
+ -- Robert Tari <robert.tari@gmail.com>  Fri, 26 Jun 2015 22:57:26 +0200
+
+sacd (15.06.15) trusty; urgency=medium
+
+  * Invalid files now do not throw exceptions, but exit gracefully
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 15 Jun 2015 23:22:38 +0200
+
+sacd (15.06.10) trusty; urgency=medium
+
+  * The -p switch prints a 1-based track index
+
+ -- Robert Tari <robert.tari@gmail.com>  Wed, 10 Jun 2015 00:37:33 +0200
+
+sacd (15.06.05) trusty; urgency=medium
+
+  * getopt error handling
+  * Automated versioning
+  * Target filenames from metadata
+
+ -- Robert Tari <robert.tari@gmail.com>  Fri, 05 Jun 2015 23:48:07 +0200
+
+sacd (15.05.25) trusty; urgency=medium
+
+  * Initial release
+
+ -- Robert Tari <robert.tari@gmail.com>  Mon, 25 May 2015 22:55:49 +0200

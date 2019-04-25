@@ -1,0 +1,15 @@
+Source: sacd
+Section: sound
+Priority: optional
+Maintainer: Robert Tari <robert.tari@gmail.com>
+Build-Depends: debhelper (>= 10), g++-4.8
+Standards-Version: 4.0.1
+Homepage: https://tari.in/www/software/sacd/
+
+Package: sacd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Super Audio CD decoder
+ Converts SACD image files, Philips DSDIFF and Sony DSF files to
+ 24-bit high resolution wave files. Handles both DST and DSD
+ streams.
