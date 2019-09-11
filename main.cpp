@@ -800,11 +800,10 @@ int main(int argc, char* argv[])
 
                 pSacd->m_pSacdReader->getTrackDetails(i, AREA_TWOCH, &cTrackDetails);
 
-                fprintf(stderr, "TRACK: %i\n", i + 1);
+                fprintf(stderr, "\nTRACK: %i\n", i + 1);
                 fprintf(stderr, "ARTIST: %s\n", cTrackDetails.strArtist.data());
                 fprintf(stderr, "TITLE: %s\n", cTrackDetails.strTitle.data());
                 fprintf(stderr, "CHANNELS: %i\n", cTrackDetails.nChannels);
-                fprintf(stderr, "SAMPLE RATE: %.4fMHz\n\n", (float)cTrackDetails.nSampleRate / 1000000);
             }
         }
         else
@@ -812,8 +811,8 @@ int main(int argc, char* argv[])
             fprintf(stderr, "No tracks.\n\n");
         }
 
-        fprintf(stderr, "MULTICHANNEL AREA TRACK LIST:\n");
-        fprintf(stderr, "-----------------------------\n\n");
+        fprintf(stderr, "\nMULTICHANNEL AREA TRACK LIST:\n");
+        fprintf(stderr, "-----------------------------\n");
 
         if (nMulch > 0)
         {
@@ -822,16 +821,15 @@ int main(int argc, char* argv[])
                 TrackDetails cTrackDetails;
                 pSacd->m_pSacdReader->getTrackDetails(i, AREA_MULCH, &cTrackDetails);
 
-                fprintf(stderr, "TRACK: %i\n", i + 1);
+                fprintf(stderr, "\nTRACK: %i\n", i + 1);
                 fprintf(stderr, "ARTIST: %s\n", cTrackDetails.strArtist.data());
                 fprintf(stderr, "TITLE: %s\n", cTrackDetails.strTitle.data());
                 fprintf(stderr, "CHANNELS: %i\n", cTrackDetails.nChannels);
-                fprintf(stderr, "SAMPLE RATE: %.4fMHz\n\n", (float)cTrackDetails.nSampleRate / 1000000);
             }
         }
         else
         {
-            fprintf(stderr, "No tracks.\n\n");
+            fprintf(stderr, "\nNo tracks.\n\n");
         }
 
         delete pSacd;

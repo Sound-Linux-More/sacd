@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2019 Robert Tari <robert@tari.in>
-    Copyright 2011-2018 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -20,7 +20,6 @@
 
 #include "sacd_dsdiff.h"
 
-#define MARK_TIME(m) ((double)m.hours * 60 * 60 + (double)m.minutes * 60 + (double)m.seconds + ((double)m.samples + (double)m.offset) / (double)m_samplerate)
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
@@ -86,12 +85,12 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
         return 0;
     }
 
-    if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck.has_id("FRM8")))
+    if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck == "FRM8"))
     {
         return 0;
     }
 
-    if (!(m_file->read(&id, sizeof(id)) == sizeof(id) && id.has_id("DSD ")))
+    if (!(m_file->read(&id, sizeof(id)) == sizeof(id) && id == "DSD "))
     {
         return 0;
     }
@@ -105,7 +104,7 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
             return 0;
         }
 
-        if (ck.has_id("FVER") && ck.get_size() == 4)
+        if (ck == "FVER" && ck.get_size() == 4)
         {
             uint32_t version;
 
@@ -116,24 +115,23 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
 
             m_version = hton32(version);
         }
-        else if (ck.has_id("PROP"))
+        else if (ck == "PROP")
         {
-            if (!(m_file->read(&id, sizeof(id)) == sizeof(id) && id.has_id("SND ")))
+            if (!(m_file->read(&id, sizeof(id)) == sizeof(id) && id == "SND "))
             {
                 return 0;
             }
 
-            uint64_t id_prop_size = ck.get_size() - sizeof(id);
-            uint64_t id_prop_read = 0;
+            int64_t id_prop_end = m_file->get_position() - sizeof(id) + ck.get_size();
 
-            while (id_prop_read < id_prop_size)
+            while (m_file->get_position() < id_prop_end)
             {
                 if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck)))
                 {
                     return 0;
                 }
 
-                if (ck.has_id("FS  ") && ck.get_size() == 4)
+                if (ck == "FS  " && ck.get_size() == 4)
                 {
                     uint32_t samplerate;
 
@@ -144,7 +142,7 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
 
                     m_samplerate = hton32(samplerate);
                 }
-                else if (ck.has_id("CHNL"))
+                else if (ck == "CHNL")
                 {
                     uint16_t channel_count;
 
@@ -173,26 +171,26 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
 
                     m_file->skip(ck.get_size() - sizeof(channel_count));
                 }
-                else if (ck.has_id("CMPR"))
+                else if (ck == "CMPR")
                 {
                     if (!(m_file->read(&id, sizeof(id)) == sizeof(id)))
                     {
                         return 0;
                     }
 
-                    if (id.has_id("DSD "))
+                    if (id == "DSD ")
                     {
                         m_dst_encoded = 0;
                     }
 
-                    if (id.has_id("DST "))
+                    if (id == "DST ")
                     {
                         m_dst_encoded = 1;
                     }
 
                     m_file->skip(ck.get_size() - sizeof(id));
                 }
-                else if (ck.has_id("LSCO"))
+                else if (ck == "LSCO")
                 {
                     uint16_t loudspeaker_config;
 
@@ -204,24 +202,22 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
                     m_loudspeaker_config = hton16(loudspeaker_config);
                     m_file->skip(ck.get_size() - sizeof(loudspeaker_config));
                 }
-                else if (ck.has_id("ID3 "))
+                else if (ck == "ID3 ")
                 {
                     t_old.index  = 0;
                     t_old.offset = m_file->get_position();
-                    t_old.size   = ck.get_size();
-                    t_old.data.resize((uint32_t)ck.get_size());
-                    m_file->read(t_old.data.data(), t_old.data.size());
+                    t_old.id3_value.resize((uint32_t)ck.get_size());
+                    m_file->read(t_old.id3_value.data(), t_old.id3_value.size());
                 }
                 else
                 {
                     m_file->skip(ck.get_size());
                 }
 
-                id_prop_read += sizeof(ck) + ck.get_size() + (ck.get_size() & 1);
                 m_file->skip(m_file->get_position() & 1);
             }
         }
-        else if (ck.has_id("DSD "))
+        else if (ck == "DSD ")
         {
             m_data_offset = m_file->get_position();
             m_data_size = ck.get_size();
@@ -234,12 +230,12 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
             s.stop_time  = (double) m_frame_count / m_framerate;
             m_subsong.push_back(s);
         }
-        else if (ck.has_id("DST "))
+        else if (ck == "DST ")
         {
             m_data_offset = m_file->get_position();
             m_data_size = ck.get_size();
 
-            if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck.has_id("FRTE") && ck.get_size() == 6))
+            if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck == "FRTE" && ck.get_size() == 6))
             {
                 return 0;
             }
@@ -271,25 +267,24 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
             s.stop_time = (double)m_frame_count / m_framerate;
             m_subsong.push_back(s);
         }
-        else if (ck.has_id("DSTI"))
+        else if (ck == "DSTI")
         {
             m_dsti_offset = m_file->get_position();
             m_dsti_size = ck.get_size();
             m_file->skip(ck.get_size());
         }
-        else if (ck.has_id("DIIN"))
+        else if (ck == "DIIN")
         {
-            uint64_t id_diin_size = ck.get_size();
-            uint64_t id_diin_read = 0;
+            int64_t id_diin_end = m_file->get_position() + ck.get_size();
 
-            while (id_diin_read < id_diin_size)
+            while (m_file->get_position() < id_diin_end)
             {
                 if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck)))
                 {
                     return false;
                 }
 
-                if (ck.has_id("MARK") && ck.get_size() >= sizeof(Marker))
+                if (ck == "MARK" && ck.get_size() >= sizeof(Marker))
                 {
                     Marker m;
 
@@ -317,7 +312,7 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
 
                                 if (m_subsong.size() > 0)
                                 {
-                                    m_subsong[m_subsong.size() - 1].start_time = MARK_TIME(m);
+                                    m_subsong[m_subsong.size() - 1].start_time = get_marker_time(m);
                                     m_subsong[m_subsong.size() - 1].stop_time  = (double)m_frame_count / m_framerate;
 
                                     if (m_subsong.size() - 1 > 0)
@@ -335,7 +330,7 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
                             {
                                 if (m_subsong.size() > 0)
                                 {
-                                    m_subsong[m_subsong.size() - 1].stop_time = MARK_TIME(m);
+                                    m_subsong[m_subsong.size() - 1].stop_time = get_marker_time(m);
                                 }
 
                                 break;
@@ -350,18 +345,16 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
                     m_file->skip(ck.get_size());
                 }
 
-                id_diin_read += sizeof(ck) + ck.get_size();
                 m_file->skip(m_file->get_position() & 1);
             }
         }
-        else if (ck.has_id("ID3 "))
+        else if (ck == "ID3 ")
         {
             id3tags_t t;
-            t.index  = m_id3tags.size();
+            t.index = m_id3tags.size();
             t.offset = m_file->get_position();
-            t.size = ck.get_size();
-            t.data.resize((uint32_t)ck.get_size());
-            m_file->read(t.data.data(), t.data.size());
+            t.id3_value.resize((uint32_t)ck.get_size());
+            m_file->read(t.id3_value.data(), t.id3_value.size());
             m_id3tags.push_back(t);
         }
         else
@@ -374,7 +367,7 @@ int sacd_dsdiff_t::open(sacd_media_t* p_file)
 
     if (m_id3tags.size() == 0)
     {
-        if (t_old.size > 0)
+        if (t_old.id3_value.size() > 0)
         {
             m_id3tags.push_back(t_old);
         }
@@ -400,7 +393,6 @@ void sacd_dsdiff_t::getTrackDetails(uint32_t track_number, area_id_e area_id, Tr
     cTrackDetails->strArtist = "Unknown Artist";
     cTrackDetails->strTitle = "Unknown Title";
     cTrackDetails->nChannels = m_channel_count;
-    cTrackDetails->nSampleRate = m_samplerate;
 }
 
 string sacd_dsdiff_t::set_track(uint32_t track_number, area_id_e area_id, uint32_t offset)
@@ -461,7 +453,7 @@ bool sacd_dsdiff_t::read_frame(uint8_t* frame_data, size_t* frame_size, frame_ty
 
         while ((uint64_t)m_file->get_position() < m_current_offset + m_current_size && m_file->read(&ck, sizeof(ck)) == sizeof(ck))
         {
-            if (ck.has_id("DSTF") && ck.get_size() <= (uint64_t)*frame_size)
+            if (ck == "DSTF" && ck.get_size() <= (uint64_t)*frame_size)
             {
                 if (m_file->read(frame_data, (size_t)ck.get_size()) == ck.get_size())
                 {
@@ -474,7 +466,7 @@ bool sacd_dsdiff_t::read_frame(uint8_t* frame_data, size_t* frame_size, frame_ty
 
                 break;
             }
-            else if (ck.has_id("DSTC") && ck.get_size() == 4)
+            else if (ck == "DSTC" && ck.get_size() == 4)
             {
                 uint32_t crc;
 
@@ -517,6 +509,11 @@ bool sacd_dsdiff_t::read_frame(uint8_t* frame_data, size_t* frame_size, frame_ty
 
     *frame_type = FRAME_INVALID;
     return false;
+}
+
+double sacd_dsdiff_t::get_marker_time(const Marker& m)
+{
+    return (double)m.hours * 60 * 60 + (double)m.minutes * 60 + (double)m.seconds + ((double)m.samples + (double)m.offset) / (double)m_samplerate;
 }
 
 uint64_t sacd_dsdiff_t::get_dsti_for_frame(uint32_t frame_nr)

@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2019 Robert Tari <robert@tari.in>
-    Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -73,8 +73,7 @@ class id3tags_t
 public:
     uint32_t index;
     uint64_t offset;
-    uint64_t size;
-    vector<uint8_t> data;
+    vector<uint8_t> id3_value;
 };
 
 class sacd_dsdiff_t : public sacd_reader_t
@@ -113,6 +112,7 @@ public:
     bool read_frame(uint8_t* frame_data, size_t* frame_size, frame_type_e* frame_type);
     void getTrackDetails(uint32_t track_number, area_id_e area_id, TrackDetails* cTrackDetails);
 private:
+    double get_marker_time(const Marker& m);
     uint64_t get_dsti_for_frame(uint32_t frame_nr);
 };
 

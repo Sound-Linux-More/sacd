@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2019 Robert Tari <robert@tari.in>
-    Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -343,7 +343,6 @@ void sacd_disc_t::getTrackDetails(uint32_t track_number, area_id_e area_id, Trac
     cTrackDetails->strArtist = cAreaTrackText.track_type_performer.size() ? cAreaTrackText.track_type_performer : "Unknown Artist";
     cTrackDetails->strTitle = cAreaTrackText.track_type_title;
     cTrackDetails->nChannels = cArea->area_toc->channel_count;
-    cTrackDetails->nSampleRate = SACD_SAMPLING_FREQUENCY;
 }
 
 string sacd_disc_t::set_track(uint32_t track_number, area_id_e area_id, uint32_t offset)

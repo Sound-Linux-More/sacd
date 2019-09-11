@@ -17,5 +17,5 @@
     along with SACD.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 */
 
-#define APPVERSION "19.3.21"
+#define APPVERSION "19.7.16"
 

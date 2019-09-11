@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2016 Robert Tari <robert@tari.in>
-    Copyright 2011-2012 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -28,14 +28,18 @@
 
 class ID
 {
+    char ckID[4];
 
 public:
 
-    uint8_t ckID[4];
-
-    bool has_id(const char* id)
+    bool operator == (const char* id)
     {
         return ckID[0] == id[0] && ckID[1] == id[1] && ckID[2] == id[2] && ckID[3] == id[3];
+    }
+
+    bool operator != (const char* id)
+    {
+        return !(*this == id);
     }
 
     void set_id(const char* id)

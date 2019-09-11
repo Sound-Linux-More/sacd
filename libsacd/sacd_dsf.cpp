@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2019 Robert Tari <robert@tari.in>
-    Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -20,7 +20,6 @@
 
 #include "sacd_dsf.h"
 
-#define MARK_TIME(m) ((double)m.hours * 60 * 60 + (double)m.minutes * 60 + (double)m.seconds + ((double)m.samples + (double)m.offset) / (double)m_samplerate)
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
 sacd_dsf_t::sacd_dsf_t()
@@ -83,7 +82,7 @@ int sacd_dsf_t::open(sacd_media_t* p_file)
     FmtDSFChunk fmt;
     uint64_t pos;
 
-    if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck.has_id("DSD ")))
+    if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck == "DSD "))
     {
         return false;
     }
@@ -105,7 +104,7 @@ int sacd_dsf_t::open(sacd_media_t* p_file)
 
     pos = m_file->get_position();
 
-    if (!(m_file->read(&fmt, sizeof(fmt)) == sizeof(fmt) && fmt.has_id("fmt ")))
+    if (!(m_file->read(&fmt, sizeof(fmt)) == sizeof(fmt) && fmt == "fmt "))
     {
         return false;
     }
@@ -169,7 +168,7 @@ int sacd_dsf_t::open(sacd_media_t* p_file)
     m_block_data_end = 0;
     m_file->seek(pos + hton64(fmt.get_size()));
 
-    if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck.has_id("data")))
+    if (!(m_file->read(&ck, sizeof(ck)) == sizeof(ck) && ck == "data"))
     {
         return false;
     }
@@ -193,7 +192,6 @@ void sacd_dsf_t::getTrackDetails(uint32_t track_number, area_id_e area_id, Track
     cTrackDetails->strArtist = "Unknown Artist";
     cTrackDetails->strTitle = "Unknown Title";
     cTrackDetails->nChannels = m_channel_count;
-    cTrackDetails->nSampleRate = m_samplerate;
 }
 
 string sacd_dsf_t::set_track(uint32_t track_number, area_id_e area_id, uint32_t offset)

@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2019 Robert Tari <robert@tari.in>
-    Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -26,7 +26,7 @@
 #include "scarletbook.h"
 #include "sacd_reader.h"
 
-#define SACD_PSN_SIZE 2064
+constexpr int SACD_PSN_SIZE = 2064;
 
 using namespace std;
 

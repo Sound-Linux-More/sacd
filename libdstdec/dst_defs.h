@@ -44,7 +44,7 @@
     using the code for non MPEG-4 Audio conforming products. This copyright notice
     must be included in all copies of derivative works.
 
-    Copyright © 2004-2016.
+    Copyright © 2004-2019.
 
     This file is part of SACD.
 
@@ -77,7 +77,6 @@
 #define dst_memset(dst, val, size) ::memset(dst, val, size)
 
 extern int log_printf(char* fmt, ...);
-enum ETTable { T_FILTER, T_PTABLE };
 
 class CSegment
 {

@@ -44,7 +44,7 @@
     using the code for non MPEG-4 Audio conforming products. This copyright notice
     must be included in all copies of derivative works.
 
-    Copyright © 2004-2016.
+    Copyright © 2004-2019.
 
     This file is part of SACD.
 
@@ -67,12 +67,11 @@
 
 #include "dst_defs.h"
 
-class CCodedTableBase
+class CCodedTable
 {
 
 public:
 
-    int TableType; // FILTER or PTABLE: indicates contents
     int StreamBits; // nr of bits all filters use in the stream
     int CPredOrder[NROFFRICEMETHODS]; // Code_PredOrder[Method]
     int CPredCoef[NROFPRICEMETHODS][MAXCPREDORDER]; // Code_PredCoef[Method][CoefNr]
@@ -81,22 +80,25 @@ public:
     int m[2 * MAX_CHANNELS][NROFFRICEMETHODS]; // m[Fir/PtabNr][Method]
     int DataLenData[2 * MAX_CHANNELS]; // Fir/PtabDataLength[Fir/PtabNr]
 
-    void calcCCP();
+    CCodedTable();
 };
 
-class CCodedTable : public CCodedTableBase
-{
-    int Data[2 * MAX_CHANNELS][MAX((1 << SIZE_CODEDPREDORDER) * SIZE_PREDCOEF, AC_BITS * AC_HISMAX)]; // Fir/PtabData[Fir/PtabNr][Index]
-};
-
-class CCodedTableF : public CCodedTableBase
+class CCodedTableF : public CCodedTable
 {
     int Data[2 * MAX_CHANNELS][(1 << SIZE_CODEDPREDORDER) * SIZE_PREDCOEF]; // FirData[FirNr][Index]
+
+public:
+
+    CCodedTableF();
 };
 
-class CCodedTableP : public CCodedTableBase
+class CCodedTableP : public CCodedTable
 {
     int Data[2 * MAX_CHANNELS][AC_BITS * AC_HISMAX]; // PtabData[PtabNr][Index]
+
+public:
+
+    CCodedTableP();
 };
 
 #endif

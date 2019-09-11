@@ -1,6 +1,6 @@
 /*
     Copyright 2015-2019 Robert Tari <robert@tari.in>
-    Copyright 2011-2016 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+    Copyright 2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 
     This file is part of SACD.
 
@@ -36,7 +36,6 @@ struct TrackDetails
     string strArtist;
     string strTitle;
     int nChannels;
-    int nSampleRate;
 };
 
 class sacd_reader_t {

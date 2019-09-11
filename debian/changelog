@@ -1,8 +1,21 @@
-sacd (19.3.21.35~ubuntu19.04.1) disco; urgency=low
+sacd (19.7.16.37~ubuntu19.04.1) disco; urgency=low
 
   * Auto build.
 
- -- Robert Tari <robert@tari.in>  Thu, 21 Mar 2019 20:43:45 +0000
+ -- Robert Tari <robert@tari.in>  Mon, 15 Jul 2019 22:42:36 +0000
+
+sacd (19.7.16) xenial; urgency=medium
+
+  * Make sure aligned_alloc uses multiple of the alignment (LP: #1836478)
+
+ -- Robert Tari <robert@tari.in>  Tue, 16 Jul 2019 00:34:52 +0200
+
+sacd (19.5.3) xenial; urgency=medium
+
+  * Fixed uneven padding error in DSDIFF
+  * Some code refactoring
+
+ -- Robert Tari <robert@tari.in>  Fri, 03 May 2019 12:08:47 +0200
 
 sacd (19.3.21) xenial; urgency=medium
 

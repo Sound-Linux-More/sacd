@@ -45,7 +45,7 @@
     using the code for non MPEG-4 Audio conforming products. This copyright notice
     must be included in all copies of derivative works.
 
-    Copyright © 2004-2016.
+    Copyright © 2004-2019.
 
     This file is part of SACD.
 
@@ -70,7 +70,6 @@
 
 CDSTDecoder::CDSTDecoder()
 {
-    ::memset(this, 0, sizeof(*this));
 }
 
 CDSTDecoder::~CDSTDecoder()
@@ -86,12 +85,7 @@ int CDSTDecoder::init(int channels, int fs44)
     FrameHdr.NrOfBitsPerCh = FrameHdr.MaxFrameLen * 8;
     FrameHdr.MaxNrOfFilters = 2 * FrameHdr.NrOfChannels;
     FrameHdr.MaxNrOfPtables = 2 * FrameHdr.NrOfChannels;
-
     FrameHdr.FrameNr = 0;
-    StrFilter.TableType = T_FILTER;
-    StrFilter.calcCCP();
-    StrPtable.TableType = T_PTABLE;
-    StrPtable.calcCCP();
 
     return 0;
 }
@@ -119,21 +113,6 @@ Predict += FilterTable[12][ChannelStatus[12]]; \
 Predict += FilterTable[13][ChannelStatus[13]]; \
 Predict += FilterTable[14][ChannelStatus[14]]; \
 Predict += FilterTable[15][ChannelStatus[15]];
-
-#define LT_RUN_FILTER_U(FilterTable, ChannelStatus) \
-{ \
-    uint32_t Predict32; \
-     \
-    Predict32  = FilterTable[ 0][ChannelStatus[ 0]] | (FilterTable[ 1][ChannelStatus[ 1]] << 16); \
-    Predict32 += FilterTable[ 2][ChannelStatus[ 2]] | (FilterTable[ 3][ChannelStatus[ 3]] << 16); \
-    Predict32 += FilterTable[ 4][ChannelStatus[ 4]] | (FilterTable[ 5][ChannelStatus[ 5]] << 16); \
-    Predict32 += FilterTable[ 6][ChannelStatus[ 6]] | (FilterTable[ 7][ChannelStatus[ 7]] << 16); \
-    Predict32 += FilterTable[ 8][ChannelStatus[ 8]] | (FilterTable[ 9][ChannelStatus[ 9]] << 16); \
-    Predict32 += FilterTable[10][ChannelStatus[10]] | (FilterTable[11][ChannelStatus[11]] << 16); \
-    Predict32 += FilterTable[12][ChannelStatus[12]] | (FilterTable[13][ChannelStatus[13]] << 16); \
-    Predict32 += FilterTable[14][ChannelStatus[14]] | (FilterTable[15][ChannelStatus[15]] << 16); \
-    Predict = (Predict32 >> 16) + (Predict32 & 0xffff); \
-}
 
 int CDSTDecoder::decode(uint8_t* DSTFrame, int frameSize, uint8_t* DSDFrame)
 {
@@ -358,42 +337,6 @@ void CDSTDecoder::LT_InitCoefTablesI(int16_t ICoefI[2 * MAX_CHANNELS][16][256])
     }
 }
 
-void CDSTDecoder::LT_InitCoefTablesU(uint16_t ICoefU[2 * MAX_CHANNELS][16][256])
-{
-    int FilterNr, FilterLength, TableNr, k, i, j;
-
-    for (FilterNr = 0; FilterNr < FrameHdr.NrOfFilters; FilterNr++)
-    {
-        FilterLength = FrameHdr.PredOrder[FilterNr];
-
-        for (TableNr = 0; TableNr < 16; TableNr++)
-        {
-            k = FilterLength - TableNr * 8;
-
-            if (k > 8)
-            {
-                k = 8;
-            }
-            else if (k < 0)
-            {
-                k = 0;
-            }
-
-            for (i = 0; i < 256; i++)
-            {
-                int cvalue = 0;
-
-                for (j = 0; j < k; j++)
-                {
-                    cvalue += (int16_t)(((i >> j) & 1) * 2 - 1) * FrameHdr.ICoefA[FilterNr][TableNr * 8 + j];
-                }
-
-                ICoefU[FilterNr][TableNr][i] = (uint16_t)(cvalue + (1 << SIZE_PREDCOEF) * 8);
-            }
-        }
-    }
-}
-
 void CDSTDecoder::LT_InitStatus(uint8_t Status[MAX_CHANNELS][16])
 {
     int ChNr, TableNr;
@@ -425,21 +368,6 @@ int16_t CDSTDecoder::LT_RunFilterI(int16_t FilterTable[16][256], uint8_t Channel
     Predict += FilterTable[13][ChannelStatus[13]];
     Predict += FilterTable[14][ChannelStatus[14]];
     Predict += FilterTable[15][ChannelStatus[15]];
-
-    return (int16_t)Predict;
-}
-
-int16_t CDSTDecoder::LT_RunFilterU(uint16_t FilterTable[16][256], uint8_t ChannelStatus[16])
-{
-    uint32_t Predict32 = FilterTable[0][ChannelStatus[0]] | (FilterTable[1][ChannelStatus[1]] << 16);
-    Predict32 += FilterTable[2][ChannelStatus[2]] | (FilterTable[3][ChannelStatus[3]] << 16);
-    Predict32 += FilterTable[4][ChannelStatus[4]] | (FilterTable[5][ChannelStatus[5]] << 16);
-    Predict32 += FilterTable[6][ChannelStatus[6]] | (FilterTable[7][ChannelStatus[7]] << 16);
-    Predict32 += FilterTable[8][ChannelStatus[8]] | (FilterTable[9][ChannelStatus[9]] << 16);
-    Predict32 += FilterTable[10][ChannelStatus[10]] | (FilterTable[11][ChannelStatus[11]] << 16);
-    Predict32 += FilterTable[12][ChannelStatus[12]] | (FilterTable[13][ChannelStatus[13]] << 16);
-    Predict32 += FilterTable[14][ChannelStatus[14]] | (FilterTable[15][ChannelStatus[15]] << 16);
-    int Predict = (Predict32 >> 16) + (Predict32 & 0xffff);
 
     return (int16_t)Predict;
 }

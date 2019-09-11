@@ -6,7 +6,7 @@ Source: https://code.launchpad.net/~robert-tari/sacd/trunk
 Files: *
 Copyright: 2015-2019 Robert Tari <robert@tari.in>
            2012 Vladislav Goncharov <vl-g@yandex.ru>
-           2011-2018 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
+           2011-2019 Maxim V.Anisiutkin <maxim.anisiutkin@gmail.com>
 License: GPL-3.0+
 
 Files: debian/*
