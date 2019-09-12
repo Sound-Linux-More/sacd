@@ -1,3 +1,6 @@
+PNAME=sacd
+PNLIB=lib$(PNAME).so.19
+
 ARCH = $(shell getconf LONG_BIT)
 
 CXX = g++
@@ -19,12 +22,7 @@ LDFLAGS += $(foreach library,$(LIBRARIES),-l$(library))
 
 .PHONY: all clean install
 
-all: clean str_data ac_data coded_table frame_reader dst_decoder dst_decoder_mt \
-     upsampler dsd_pcm_converter_hq \
-     dsd_pcm_converter_engine \
-     scarletbook sacd_disc sacd_media sacd_dsdiff sacd_dsf \
-     main \
-     sacd
+all: clean $(PNAME)
 
 str_data: dst_defs.h str_data.h str_data.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c libdstdec/str_data.cpp -o libdstdec/str_data.o
@@ -71,16 +69,20 @@ sacd_dsf: scarletbook.h sacd_dsd.h sacd_reader.h endianess.h sacd_dsf.h sacd_dsf
 main: version.h sacd_reader.h sacd_disc.h sacd_dsdiff.h sacd_dsf.h dsd_pcm_converter_hq.h dsd_pcm_converter_engine.h main.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c main.cpp -o main.o
 
-sacd: frame_reader.o ac_data.o str_data.o coded_table.o dst_decoder.o dst_decoder_mt.o dsd_pcm_converter_hq.o dsd_pcm_converter_engine.o sacd_media.o sacd_dsf.o sacd_dsdiff.o sacd_disc.o main.o
+$(PNAME): str_data ac_data coded_table frame_reader dst_decoder dst_decoder_mt dsd_pcm_converter_engine upsampler dsd_pcm_converter_hq scarletbook sacd_disc sacd_media sacd_dsdiff sacd_dsf main
 	$(CXX) $(CXXFLAGS) -o sacd libdsd2pcm/upsampler.o libdsd2pcm/dsd_pcm_converter_hq.o libdsd2pcm/dsd_pcm_converter_engine.o libdstdec/frame_reader.o libdstdec/ac_data.o libdstdec/str_data.o libdstdec/coded_table.o libdstdec/dst_decoder.o libdstdec/dst_decoder_mt.o libsacd/sacd_media.o libsacd/sacd_dsf.o libsacd/sacd_dsdiff.o libsacd/scarletbook.o libsacd/sacd_disc.o main.o $(LDFLAGS)
 
+shared: str_data ac_data coded_table frame_reader dst_decoder dst_decoder_mt dsd_pcm_converter_engine upsampler dsd_pcm_converter_hq scarletbook sacd_disc sacd_media sacd_dsdiff sacd_dsf main
+	$(CXX) -shared $(CXXFLAGS) -Wl,-soname,$(PNLIB) -o $(PNLIB) libdsd2pcm/upsampler.o libdsd2pcm/dsd_pcm_converter_hq.o libdsd2pcm/dsd_pcm_converter_engine.o libdstdec/frame_reader.o libdstdec/ac_data.o libdstdec/str_data.o libdstdec/coded_table.o libdstdec/dst_decoder.o libdstdec/dst_decoder_mt.o libsacd/sacd_media.o libsacd/sacd_dsf.o libsacd/sacd_dsdiff.o libsacd/scarletbook.o libsacd/sacd_disc.o $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $(PNAME) $(PNLIB) main.o $(LDFLAGS)
+
 clean:
-	rm -f sacd *.o $(foreach librarydir,$(LIBRARY_DIRS),$(librarydir)/*.o)
+	rm -f $(PNAME) $(PNLIB) *.o $(foreach librarydir,$(LIBRARY_DIRS),$(librarydir)/*.o)
 
 install: sacd
 
 	install -d $(DESTDIR)/usr/bin
-	install -m 0755 ./sacd $(DESTDIR)/usr/bin
+	install -m 0755 $(PNAME) $(DESTDIR)/usr/bin
 	install -d $(DESTDIR)/usr/share/man/man1
-	install -m 0644 ./man/sacd.1 $(DESTDIR)/usr/share/man/man1
+	install -m 0644 ./man/$(PNAME).1 $(DESTDIR)/usr/share/man/man1
 
