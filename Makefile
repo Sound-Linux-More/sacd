@@ -20,6 +20,8 @@ LIBRARY_DIRS = libdstdec libdsd2pcm libsacd
 LDFLAGS = $(foreach librarydir,$(LIBRARY_DIRS),-L$(librarydir))
 LDFLAGS += $(foreach library,$(LIBRARIES),-l$(library))
 
+PREFIX := /usr
+
 .PHONY: all clean install
 
 all: clean $(PNAME)
@@ -81,8 +83,8 @@ clean:
 
 install: sacd
 
-	install -d $(DESTDIR)/usr/bin
-	install -m 0755 $(PNAME) $(DESTDIR)/usr/bin
-	install -d $(DESTDIR)/usr/share/man/man1
-	install -m 0644 ./man/$(PNAME).1 $(DESTDIR)/usr/share/man/man1
+	install -d $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 $(PNAME) $(DESTDIR)$(PREFIX)/bin
+	install -d $(DESTDIR)$(PREFIX)/share/man/man1
+	install -m 0644 ./man/$(PNAME).1 $(DESTDIR)$(PREFIX)/share/man/man1
 
