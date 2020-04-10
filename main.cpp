@@ -614,6 +614,11 @@ void * fnDecoder (void* threadargs)
         memcpy (arrHeader + 60, "data", 4);
         packageInt (arrHeader, 64, nSize - 68, 4);
         FILE * pFile = (g_StdOut == 0) ? fopen(strOutFile.data(), "wb") : stdout;
+        if (pFile == NULL)
+        {
+            fprintf(stderr, "ERROR: Failed to open %s\n", strOutFile.data());
+            return 0;
+        }
         fwrite(arrHeader, 1, 68, pFile);
 
         bool bDone = false;
