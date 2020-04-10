@@ -613,7 +613,14 @@ void * fnDecoder (void* threadargs)
         memcpy (arrHeader + 44, arrSubtype, 16);
         memcpy (arrHeader + 60, "data", 4);
         packageInt (arrHeader, 64, nSize - 68, 4);
+        retry_open:
         FILE * pFile = (g_StdOut == 0) ? fopen(strOutFile.data(), "wb") : stdout;
+        if (pFile == NULL && errno == ENAMETOOLONG) {
+            string::size_type fname_start = strOutFile.find_last_of("/");
+            int middle_of_filename = (strOutFile.length() - fname_start) / 2 + fname_start;
+            strOutFile.replace(middle_of_filename - 3, 6, "...");
+            goto retry_open;
+        }
         fwrite(arrHeader, 1, 68, pFile);
 
         bool bDone = false;
